@@ -1,16 +1,60 @@
 package com.hseapple.dao;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "chat_message", schema = "public")
 public class MessageEntity {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setChatID(Long chatID) {
+        this.chatID = chatID;
+    }
+
+    public void setUserID(Long userID) {
+        this.userID = userID;
+    }
+
+    public void setReplyTo(Long replyTo) {
+        this.replyTo = replyTo;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setMedia_link(String media_link) {
+        this.media_link = media_link;
+    }
+
+    public void setDoc_link(String doc_link) {
+        this.doc_link = doc_link;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Column(name = "chatid")
     private Long chatID;
 
@@ -31,7 +75,11 @@ public class MessageEntity {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     public Long getId() {
         return id;
@@ -61,19 +109,13 @@ public class MessageEntity {
         return doc_link;
     }
 
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public Timestamp getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Column(name = "updated_at")
-    private Timestamp updatedAt;
-
-
 
     //getters and setters
 }

@@ -1,9 +1,14 @@
 package com.hseapple.dao;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,7 +30,7 @@ public class TaskEntity {
         return description;
     }
 
-    public Long getCourseID() {
+    public Integer getCourseID() {
         return courseID;
     }
 
@@ -69,7 +74,7 @@ public class TaskEntity {
         this.description = description;
     }
 
-    public void setCourseID(Long courseID) {
+    public void setCourseID(Integer courseID) {
         this.courseID = courseID;
     }
 
@@ -122,9 +127,8 @@ public class TaskEntity {
 
     @NotNull
     @Column(name = "courseid")
-    private Long courseID;
+    private Integer courseID;
 
-    @NotNull
     @Column(name = "createdby")
     private Long createdBy;
 

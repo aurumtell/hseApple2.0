@@ -1,9 +1,14 @@
 package com.hseapple.dao;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -93,7 +98,6 @@ public class UserTaskEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
     @Column(name = "userid")
     private Long userID;
 
@@ -107,11 +111,11 @@ public class UserTaskEntity {
     @Column(name = "status")
     private Boolean status;
 
-    @NotNull
+
     @Column(name = "taskid")
     private Long taskID;
 
-    @NotNull
+
     @Column(name = "createdby")
     private Long createdBy;
 

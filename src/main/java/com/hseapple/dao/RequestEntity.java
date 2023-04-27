@@ -1,9 +1,14 @@
 package com.hseapple.dao;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -17,11 +22,11 @@ public class RequestEntity {
         return userID;
     }
 
-    public Long getCourseID() {
+    public Integer getCourseID() {
         return courseID;
     }
 
-    public Long getRoleID() {
+    public Integer getRoleID() {
         return roleID;
     }
 
@@ -45,11 +50,11 @@ public class RequestEntity {
         this.userID = userID;
     }
 
-    public void setCourseID(Long courseID) {
+    public void setCourseID(Integer courseID) {
         this.courseID = courseID;
     }
 
-    public void setRoleID(Long roleID) {
+    public void setRoleID(Integer roleID) {
         this.roleID = roleID;
     }
 
@@ -71,11 +76,11 @@ public class RequestEntity {
 
     @NotNull
     @Column(name = "courseid")
-    private Long courseID;
+    private Integer courseID;
 
     @NotNull
     @Column(name = "roleid")
-    private Long roleID;
+    private Integer roleID;
 
     @NotNull
     @Column(name = "approved")
