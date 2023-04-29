@@ -3,15 +3,7 @@ package com.hseapple.service;
 import com.hseapple.app.error.ExceptionMessage;
 import com.hseapple.app.error.exception.BusinessException;
 import com.hseapple.app.security.UserAndRole;
-import com.hseapple.dao.CourseDao;
-import com.hseapple.dao.ProfileDao;
-import com.hseapple.dao.ProfileEntity;
-import com.hseapple.dao.RequestDao;
-import com.hseapple.dao.RequestEntity;
-import com.hseapple.dao.UserCourseDao;
-import com.hseapple.dao.UserCourseEntity;
-import com.hseapple.dao.UserDao;
-import com.hseapple.dao.UserEntity;
+import com.hseapple.dao.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,7 +29,7 @@ public class UserService {
     RequestDao requestDao;
 
     @Autowired
-    ChatService chatService;
+    ChatMemberDao chatMemberDao;
 
     @Autowired
     UserCourseDao userCourseDao;
@@ -49,7 +41,7 @@ public class UserService {
         return userDao.findById(userID).orElseThrow(() -> new BusinessException(ExceptionMessage.USER_NOT_FOUND));
     }
 
-    public UserEntity changeUser(Long userID, UserEntity newUser) throws UsernameNotFoundException{
+    public UserEntity changeUser(Long userID, UserEntity newUser) throws UsernameNotFoundException {
         UserEntity user = userDao.findById(userID).orElseThrow(() -> new BusinessException(ExceptionMessage.USER_NOT_FOUND));
         user.setCommonname(newUser.getCommonname());
         user.setEmail(newUser.getEmail());
@@ -95,13 +87,13 @@ public class UserService {
         request.setApproved(newRequestEntity.getApproved());
         System.out.println(newRequestEntity.getApproved());
         if (newRequestEntity.getApproved()) {
-            if (userCourse.isEmpty()){
+            if (userCourse.isEmpty()) {
                 createUserCourse(courseID, userID, request.getRoleID());
             } else {
                 userCourse.ifPresent(u -> u.setRoleID(request.getRoleID()));
             }
             if (request.getRoleID() == 1) {
-                chatService.addMember(userID, courseID);
+                addMember(userID, courseID);
             }
         }
         request.setUpdatedAt(LocalDateTime.now());
@@ -109,7 +101,7 @@ public class UserService {
         return request;
     }
 
-    public Map<String, Object> getProfile(){
+    public Map<String, Object> getProfile() {
         UserAndRole user = (UserAndRole) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ProfileEntity profile = userDao.getProfile(user.getId()).orElseThrow(() -> new BusinessException(ExceptionMessage.OBJECT_NOT_FOUND));
         Map<String, Object> json = new HashMap<String, Object>();
@@ -125,7 +117,9 @@ public class UserService {
             throw new BusinessException(ExceptionMessage.ROLE_ERROR);
         }
         UserAndRole user = (UserAndRole) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        requestDao.findByUserIDAndCourseID(user.getId(), courseID).ifPresent(r -> {throw new BusinessException(ExceptionMessage.OBJECT_ALREADY_EXISTS);});
+        requestDao.findByUserIDAndCourseID(user.getId(), courseID).ifPresent(r -> {
+            throw new BusinessException(ExceptionMessage.OBJECT_ALREADY_EXISTS);
+        });
         RequestEntity request = new RequestEntity();
         request.setCourseID(courseID);
         request.setUserID(user.getId());
@@ -153,7 +147,7 @@ public class UserService {
 
     public void updateUserCourse(Integer courseID, Long userID, Integer roleID) {
         Optional<UserCourseEntity> userCourse = userCourseDao.findByUserIDAndCourseID(userID, courseID);
-        userCourse.ifPresent(u ->{
+        userCourse.ifPresent(u -> {
             u.setRoleID(roleID);
             userCourseDao.save(u);
         });
@@ -176,5 +170,23 @@ public class UserService {
     public Optional<UserCourseEntity> getRole(Integer courseID) {
         UserAndRole user = (UserAndRole) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userCourseDao.findByUserIDAndCourseID(user.getId(), courseID);
+    }
+
+    public void addMember(Long userID, Integer courseID) {
+        long chatid, chatid_end;
+        if (courseID == 1) {
+            chatid = 1L;
+            chatid_end = 4L;
+        } else {
+            chatid = 5L;
+            chatid_end = 8L;
+        }
+        for (long i = chatid; i <= chatid_end; i++) {
+            ChatMemberEntity chatMember = new ChatMemberEntity();
+            chatMember.setChatID(i);
+            chatMember.setCreatedAt(LocalDateTime.now());
+            chatMember.setUserID(userID);
+            chatMemberDao.save(chatMember);
+        }
     }
 }

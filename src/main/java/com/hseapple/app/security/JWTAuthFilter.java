@@ -6,8 +6,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.hseapple.app.error.exception.AuthorizationException;
 import com.hseapple.dao.UserDao;
 import com.hseapple.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,12 +25,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class JWTAuthFilter extends OncePerRequestFilter {
-    @Autowired
-    UserDao userDao;
-
-    @Autowired
-    UserService userService;
+    private final UserDao userDao;
+    private final UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,

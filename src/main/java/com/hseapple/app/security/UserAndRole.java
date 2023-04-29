@@ -11,16 +11,12 @@ import java.util.stream.Collectors;
 public class UserAndRole implements UserDetails {
     private final String username;
     private final String email;
-    private Long id;
     List<String> roles;
+    private Long id;
 
-    public UserAndRole(String username, String email, Long id){
+    public UserAndRole(String username, String email, Long id) {
         this.username = username;
         this.email = email;
-        this.id = id;
-    }
-
-    public void setId(Long id) {
         this.id = id;
     }
 
@@ -28,7 +24,13 @@ public class UserAndRole implements UserDetails {
         return id;
     }
 
-    public String getEmail() { return email; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 
     @Override
     public String getUsername() {

@@ -12,16 +12,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 import java.util.Optional;
-
 
 @RestController
 @SecurityRequirement(name = "Authorization")
@@ -39,7 +33,7 @@ public class UserController {
     @RequestMapping(value = "user/{userID}/application/approved", method = RequestMethod.GET)
     @ResponseBody
     @PreAuthorize("hasAnyAuthority('TEACHER', 'STUDENT', 'ASSIST')")
-    public UserEntity getUser(@PathVariable("userID") Long userID){
+    public UserEntity getUser(@PathVariable("userID") Long userID) {
         return userService.findUser(userID);
     }
 
@@ -47,7 +41,7 @@ public class UserController {
     @Operation(summary = "Update user",
             description = "Provides new updated user.Access role - TEACHER, STUDENT, ASSIST")
     @PreAuthorize("hasAnyAuthority('TEACHER', 'STUDENT', 'ASSIST')")
-    @RequestMapping (value = "/user/{userID}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/user/{userID}", method = RequestMethod.PUT)
     public UserEntity updateUser(@RequestBody UserEntity newUser, @PathVariable("userID") Long userID) {
         return userService.changeUser(userID, newUser);
     }
@@ -57,7 +51,7 @@ public class UserController {
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     @ResponseBody
     @PreAuthorize("hasAnyAuthority('TEACHER', 'STUDENT', 'ASSIST')")
-    public Iterable<UserEntity> getListUsers(Integer courseID, Integer roleID, Boolean approved){
+    public Iterable<UserEntity> getListUsers(Integer courseID, Integer roleID, Boolean approved) {
         return userService.getUsers(courseID, roleID, approved);
     }
 
@@ -67,7 +61,7 @@ public class UserController {
     @ResponseBody
     @PreAuthorize("hasAnyAuthority('TEACHER')")
     public RequestEntity getRequest(@PathVariable("userID") Long userID,
-                                              @PathVariable("courseID") Integer courseID){
+                                    @PathVariable("courseID") Integer courseID) {
         return userService.getUserRequest(userID, courseID);
     }
 
@@ -77,7 +71,7 @@ public class UserController {
     @RequestMapping(value = "/request/{courseID}/{userID}", method = RequestMethod.PUT)
     @ResponseBody
     public RequestEntity updateRequest(@RequestBody RequestEntity requestEntity, @PathVariable("userID") Long userID,
-                                              @PathVariable("courseID") Integer courseID){
+                                       @PathVariable("courseID") Integer courseID) {
         return userService.updateUserRequest(courseID, userID, requestEntity);
     }
 
@@ -93,7 +87,7 @@ public class UserController {
             description = "Provides new updated user profile. Access role - TEACHER, STUDENT, ASSIST")
     @RequestMapping(value = "/profile", method = RequestMethod.PUT)
     @ResponseBody
-    public ProfileEntity updateProfile(@RequestBody ProfileEntity profileEntity){
+    public ProfileEntity updateProfile(@RequestBody ProfileEntity profileEntity) {
         return userService.updateProfile(profileEntity);
     }
 
@@ -101,7 +95,7 @@ public class UserController {
             description = "Provides new created request. Access role - STUDENT, ASSIST")
     @RequestMapping(value = "/user/request/{courseID}/{roleID}", method = RequestMethod.GET)
     @ResponseBody
-    public RequestEntity createRequest(@PathVariable("courseID") Integer courseID, @PathVariable("roleID") Integer roleID){
+    public RequestEntity createRequest(@PathVariable("courseID") Integer courseID, @PathVariable("roleID") Integer roleID) {
         return userService.createRequest(courseID, roleID);
     }
 
@@ -109,7 +103,7 @@ public class UserController {
             description = "Provides user entity")
     @RequestMapping(value = "/auth", method = RequestMethod.GET)
     @ResponseBody
-    public UserEntity auth(){
+    public UserEntity auth() {
         return userService.registerUser();
     }
 
@@ -117,7 +111,7 @@ public class UserController {
             description = "Provides user entity")
     @RequestMapping(value = "/course/{courseID}/role", method = RequestMethod.GET)
     @ResponseBody
-    public Optional<UserCourseEntity> getRole(@PathVariable("courseID") Integer courseID){
+    public Optional<UserCourseEntity> getRole(@PathVariable("courseID") Integer courseID) {
         return userService.getRole(courseID);
     }
 }

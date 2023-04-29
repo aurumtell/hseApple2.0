@@ -1,16 +1,18 @@
 package com.hseapple.dao;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "user_role", schema = "public")
 public class RoleEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    @NotNull
+    @Column(name = "role_user")
+    private String role_user;
+
     public Integer getId() {
         return id;
     }
@@ -26,14 +28,6 @@ public class RoleEntity {
     public void setRole_user(String role_user) {
         this.role_user = role_user;
     }
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @NotNull
-    @Column(name = "role_user")
-    private String role_user;
 
 
     //getters and setters

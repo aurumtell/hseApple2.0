@@ -7,18 +7,9 @@ import com.hseapple.service.ChatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -31,14 +22,12 @@ public class ChatController {
     @Autowired
     ChatService chatService;
 
-    Logger logger = LoggerFactory.getLogger(ChatController.class);
-
     @Operation(summary = "Get group for course",
             description = "Provides group for course")
     @RequestMapping(value = "/group/{groupID}", method = RequestMethod.GET)
     @ResponseBody
     @PreAuthorize("hasAnyAuthority('TEACHER', 'STUDENT', 'ASSIST')")
-    public ChatEntity getGroupForCourse(@PathVariable("groupID") Long groupID){
+    public ChatEntity getGroupForCourse(@PathVariable("groupID") Long groupID) {
         return chatService.getGroupForCourse(groupID);
     }
 
@@ -55,7 +44,7 @@ public class ChatController {
     @RequestMapping(value = "/course/{courseID}/group", method = RequestMethod.GET)
     @ResponseBody
     @PreAuthorize("hasAnyAuthority('TEACHER', 'STUDENT', 'ASSIST')")
-    public Iterable<ChatEntity> getGroups(@PathVariable Integer courseID){
+    public Iterable<ChatEntity> getGroups(@PathVariable Integer courseID) {
         return chatService.findAllGroups(courseID);
     }
 
@@ -65,7 +54,7 @@ public class ChatController {
     @ResponseBody
     @PreAuthorize("hasAnyAuthority('TEACHER', 'STUDENT', 'ASSIST')")
     public MessageEntity getMessageForChat(@PathVariable("groupID") Long groupID,
-                                                     @PathVariable("messageID") Long messageID){
+                                           @PathVariable("messageID") Long messageID) {
         return chatService.getMessageForChat(groupID, messageID);
     }
 
@@ -82,7 +71,7 @@ public class ChatController {
     @RequestMapping(value = "/group/{groupID}/message", method = RequestMethod.GET)
     @ResponseBody
     @PreAuthorize("hasAnyAuthority('TEACHER', 'STUDENT', 'ASSIST')")
-    public Iterable<MessageEntity> getMessages(@PathVariable Long groupID, @RequestParam("start") Long start){
+    public Iterable<MessageEntity> getMessages(@PathVariable Long groupID, @RequestParam("start") Long start) {
         return chatService.findMessages(groupID, start);
     }
 
@@ -108,7 +97,7 @@ public class ChatController {
     @RequestMapping(value = "/group/{groupID}/list", method = RequestMethod.GET)
     @ResponseBody
     @PreAuthorize("hasAnyAuthority('TEACHER', 'STUDENT', 'ASSIST')")
-    public Iterable<UserEntity> getListMembers(@PathVariable Long groupID){
+    public Iterable<UserEntity> getListMembers(@PathVariable Long groupID) {
         return chatService.getMembers(groupID);
     }
 
@@ -117,7 +106,7 @@ public class ChatController {
     @RequestMapping(value = "/group/{groupID}/member/{userID}", method = RequestMethod.GET)
     @ResponseBody
     @PreAuthorize("hasAnyAuthority('TEACHER', 'STUDENT', 'ASSIST')")
-    public UserEntity getMember(@PathVariable Long groupID, @PathVariable Long userID){
+    public UserEntity getMember(@PathVariable Long groupID, @PathVariable Long userID) {
         return chatService.getMember(groupID, userID);
     }
 }

@@ -5,18 +5,9 @@ import com.hseapple.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -29,14 +20,12 @@ public class PostController {
     @Autowired
     PostService postService;
 
-    Logger logger = LoggerFactory.getLogger(CourseController.class);
-
     @Operation(summary = "Get posts for course",
             description = "Provides all available posts for course. Access roles - TEACHER, ASSIST, STUDENT")
     @PreAuthorize("hasAnyAuthority('TEACHER', 'STUDENT', 'ASSIST')")
     @RequestMapping(value = "/course/{courseID}/post", method = RequestMethod.GET)
     @ResponseBody
-    public Iterable<PostEntity> getPosts(@PathVariable("courseID") Integer courseID, @RequestParam("start") Long start){
+    public Iterable<PostEntity> getPosts(@PathVariable("courseID") Integer courseID, @RequestParam("start") Long start) {
         return postService.findAllPosts(courseID, start);
     }
 
@@ -45,8 +34,8 @@ public class PostController {
     @PreAuthorize("hasAnyAuthority('TEACHER', 'ASSIST')")
     @RequestMapping(value = "/course/post/{postID}", method = RequestMethod.PUT)
     @ResponseBody
-    public PostEntity updatePost(@RequestBody PostEntity newPost, @PathVariable Long postID){
-        return postService.updatePost(newPost, postID);
+    public void updatePost(@RequestBody PostEntity newPost, @PathVariable Long postID) {
+        postService.updatePost(newPost, postID);
     }
 
     @Operation(summary = "Create post",
